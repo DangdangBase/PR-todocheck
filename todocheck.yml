@@ -1,0 +1,23 @@
+name: TODO check
+
+on:
+  pull_request:
+    types: [synchronize, edited]
+
+jobs:
+  todocheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: git fetch origin ${{ github.head_ref }}
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "14"
+
+      - name: TODO check
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.number }}
+        run: node todocheck.js
